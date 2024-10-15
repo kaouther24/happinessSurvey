@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -38,10 +39,11 @@ public class BankAccountController {
 
     @PostMapping("/new")
     @ResponseBody
-    public List<BankAccount> createNewAccount(@RequestBody BankAccount bankAccount) throws IOException {
-
-        BankAccount newAccount = new BankAccount(bankAccount.getCustomerUuid(), bankAccount.getBalance());
-       return accountService.addNewAccount(newAccount);
+    public String createNewAccount(@RequestBody BankAccount bankAccount) throws IOException {
+        String uuid = UUID.randomUUID().toString();
+        BankAccount newAccount = new BankAccount(uuid, bankAccount.getCustomerUuid(), bankAccount.getBalance());
+        accountService.addNewAccount(newAccount);
+        return uuid;
 
     }
 }
