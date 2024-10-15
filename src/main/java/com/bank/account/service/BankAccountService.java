@@ -11,12 +11,13 @@ import org.springframework.core.io.ResourceLoader;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BankAccountService {
 
     private final ResourceLoader resourceLoader;
-    private static List<BankAccount> accounts;
+    public static List<BankAccount> accounts;
 
     public BankAccountService(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
@@ -46,11 +47,14 @@ public class BankAccountService {
         return result;
     }
 
-    public List<BankAccount> addNewAccount(BankAccount newAccount) throws IOException {
+    public String addNewAccount(BankAccount newAccount) throws IOException {
         if (accounts == null) {
             accounts = getAccounts();
         }
+        String generatedUuid = UUID.randomUUID().toString();
+        newAccount.setUuid(generatedUuid);
         accounts.add(newAccount);
-        return accounts;
+        System.out.println("New account added with UUID: " + generatedUuid);
+        return generatedUuid;
     }
 }

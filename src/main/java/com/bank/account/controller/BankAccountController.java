@@ -38,7 +38,7 @@ public class BankAccountController {
 
     @PostMapping("/new")
     @ResponseBody
-    public List<BankAccount> createNewAccount(@RequestBody BankAccount bankAccount) throws IOException {
+    public String createNewAccount(@RequestBody BankAccount bankAccount) throws IOException {
 
         BankAccount newAccount = new BankAccount(bankAccount.getCustomerUuid(), bankAccount.getBalance());
        return accountService.addNewAccount(newAccount);

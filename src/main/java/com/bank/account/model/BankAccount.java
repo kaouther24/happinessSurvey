@@ -11,9 +11,7 @@ public class BankAccount {
     public BankAccount() {
     }
 
-    public BankAccount( String customerUuid , BigDecimal balance) {
-        UUID generatedUuid = UUID.randomUUID();
-        this.uuid = generatedUuid.toString();
+    public BankAccount(String customerUuid, BigDecimal balance) {
         this.balance = balance;
         this.customerUuid = customerUuid;
     }
@@ -43,13 +41,7 @@ public class BankAccount {
     public BigDecimal getBalance() {
         return balance;
     }
-//
-//    public void deposit(BigDecimal amount) {
-//        balance = balance.add(amount);  // Add amount to balance
-//    }
-//
-//    public void withdraw(BigDecimal amount) {
-//        balance = balance.subtract(amount);  // Subtract amount from balance
-//    }
 
+    public void setBalance(BigDecimal i) {
+    }
 }

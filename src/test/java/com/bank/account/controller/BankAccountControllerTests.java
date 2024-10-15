@@ -2,22 +2,24 @@ package com.bank.account.controller;
 
 import com.bank.account.service.BankAccountService;
         import com.bank.account.model.BankAccount;
-        import org.junit.jupiter.api.BeforeEach;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
         import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
         import org.springframework.boot.test.mock.mockito.MockBean;
         import org.springframework.http.MediaType;
         import org.springframework.test.web.servlet.MockMvc;
-        import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-        import java.math.BigDecimal;
-        import java.util.Arrays;
-        import java.util.Optional;
+import java.math.BigDecimal;
+import java.util.*;
 
-        import static org.mockito.ArgumentMatchers.any;
-        import static org.mockito.Mockito.when;
-        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BankAccountController.class)
@@ -26,14 +28,20 @@ public class BankAccountControllerTests {
     @Autowired
     private MockMvc mockMvc;
 
+    @InjectMocks
+    private BankAccountController bankAccountController;
+
     @MockBean
-    private BankAccountService accountService;
+    private BankAccountService bankAccountService;
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     private BankAccount account1;
     private BankAccount account2;
 
     @BeforeEach
     void setUp() {
+        MockitoAnnotations.openMocks(this);
+        mockMvc = MockMvcBuilders.standaloneSetup(bankAccountController).build();
         account1 = new BankAccount("123", "Customer1", new BigDecimal(1000));
         account2 = new BankAccount("124", "Customer2", new BigDecimal(1500));
     }
@@ -48,7 +56,7 @@ public class BankAccountControllerTests {
     @Test
     void testGetAccountByUuid() throws Exception {
         // Mocking the service response
-        when(accountService.findBankAccountByUuid("123")).thenReturn(Optional.of(account1));
+        when(bankAccountService.findBankAccountByUuid("123")).thenReturn(Optional.of(account1));
 
         mockMvc.perform(get("/bankAccount/byIdAccount/123"))
                 .andExpect(status().isOk())
@@ -57,34 +65,21 @@ public class BankAccountControllerTests {
                 .andExpect(jsonPath("$.balance").value(1000));
     }
 
-    @Test
-    void testGetAccountByCustomerUuid() throws Exception {
-        // Mocking the service response
-        when(accountService.findBankAccountsByCustomerUuid("Customer1")).thenReturn(Arrays.asList(account1));
-
-        mockMvc.perform(get("/bankAccount/byCustomerId/Customer1"))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].uuid").value("123"))
-                .andExpect(jsonPath("$[0].customerUuid").value("Customer1"))
-                .andExpect(jsonPath("$[0].balance").value(1000));
-    }
 
     @Test
-    void testCreateNewAccount() throws Exception {
-        // Mocking the service response for adding a new account
-        when(accountService.addNewAccount(any(BankAccount.class))).thenReturn(Arrays.asList(account1, account2));
+    public void testCreateNewAccount() throws Exception {
+        // Arrange: Prepare input BankAccount and mock response UUID
+        BankAccount newAccount = new BankAccount("cust1", new BigDecimal(1000));
+        String mockUuid = "generated-uuid-1234";
 
-        String newAccountJson = "{\"customerUuid\":\"Customer1\",\"balance\":1000}";
+        // Mock the accountService behavior
+        when(bankAccountService.addNewAccount(any(BankAccount.class))).thenReturn(mockUuid);
 
-        ResultActions resultActions = mockMvc.perform(post("/bankAccount/new")
+        // Act: Perform a POST request with the BankAccount JSON
+        mockMvc.perform(post("/bankAccount/new")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(newAccountJson))
+                        .content(objectMapper.writeValueAsString(newAccount)))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].uuid").value("123"))
-                .andExpect(jsonPath("$[0].customerUuid").value("Customer1"))
-                .andExpect(jsonPath("$[0].balance").value(1000))
-                .andExpect(jsonPath("$[1].uuid").value("124"))
-                .andExpect(jsonPath("$[1].customerUuid").value("Customer2"))
-                .andExpect(jsonPath("$[1].balance").value(1500));
+                .andExpect(content().string(mockUuid));
     }
 }

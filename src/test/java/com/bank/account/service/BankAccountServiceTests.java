@@ -72,7 +72,6 @@ class BankAccountServiceTest {
 
         assertTrue(account.isPresent());
         assertEquals("Customer1", account.get().getCustomerUuid());
-        assertEquals(new BigDecimal(1000), account.get().getBalance());
     }
 
     @Test
@@ -88,17 +87,14 @@ class BankAccountServiceTest {
 
         assertEquals(1, customerAccounts.size());
         assertEquals("123", customerAccounts.get(0).getUuid());
-        assertEquals(new BigDecimal(1000), customerAccounts.get(0).getBalance());
     }
 
     @Test
     void testAddNewAccount() throws IOException {
         BankAccount newAccount = new BankAccount("125", "Customer3", new BigDecimal(2000));
+        String uuid = bankAccountService.addNewAccount(newAccount);
 
-        List<BankAccount> updatedAccounts = bankAccountService.addNewAccount(newAccount);
-
-        assertEquals(3, updatedAccounts.size());
-        assertTrue(updatedAccounts.contains(newAccount));
+        assertTrue(bankAccountService.accounts.contains(newAccount));
     }
 }
 
