@@ -4,23 +4,20 @@ import com.bank.account.service.BankAccountService;
         import com.bank.account.model.BankAccount;
         import org.junit.jupiter.api.BeforeEach;
         import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.springframework.beans.factory.annotation.Autowired;
         import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
         import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.ResultActions;
+        import org.springframework.http.MediaType;
+        import org.springframework.test.web.servlet.MockMvc;
+        import org.springframework.test.web.servlet.ResultActions;
 
-import java.io.IOException;
-import java.math.BigDecimal;
-import java.util.*;
+        import java.math.BigDecimal;
+        import java.util.Arrays;
+        import java.util.Optional;
 
-import static org.hamcrest.Matchers.matchesPattern;
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+        import static org.mockito.ArgumentMatchers.any;
+        import static org.mockito.Mockito.when;
+        import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
         import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(BankAccountController.class)
@@ -31,8 +28,6 @@ public class BankAccountControllerTests {
 
     @MockBean
     private BankAccountService accountService;
-    @Mock
-    private List<BankAccount> accounts;
 
     private BankAccount account1;
     private BankAccount account2;
@@ -74,21 +69,22 @@ public class BankAccountControllerTests {
                 .andExpect(jsonPath("$[0].balance").value(1000));
     }
 
-
     @Test
     void testCreateNewAccount() throws Exception {
-        String generatedUuid = UUID.randomUUID().toString();
-        BankAccount newAccount = new BankAccount(generatedUuid, "Customer1", new BigDecimal(1000));
-        when(accountService.addNewAccount(any(BankAccount.class)))
-                .thenReturn(Arrays.asList(newAccount));
+        // Mocking the service response for adding a new account
+        when(accountService.addNewAccount(any(BankAccount.class))).thenReturn(Arrays.asList(account1, account2));
 
         String newAccountJson = "{\"customerUuid\":\"Customer1\",\"balance\":1000}";
 
         ResultActions resultActions = mockMvc.perform(post("/bankAccount/new")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(newAccountJson))
-                .andExpect(status().isOk());
-
-        verify(accountService, times(1)).addNewAccount(any(BankAccount.class));
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].uuid").value("123"))
+                .andExpect(jsonPath("$[0].customerUuid").value("Customer1"))
+                .andExpect(jsonPath("$[0].balance").value(1000))
+                .andExpect(jsonPath("$[1].uuid").value("124"))
+                .andExpect(jsonPath("$[1].customerUuid").value("Customer2"))
+                .andExpect(jsonPath("$[1].balance").value(1500));
     }
 }

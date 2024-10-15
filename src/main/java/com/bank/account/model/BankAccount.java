@@ -11,7 +11,14 @@ public class BankAccount {
     public BankAccount() {
     }
 
-      public BankAccount(String uuid, String customerUuid, BigDecimal balance) {
+    public BankAccount( String customerUuid , BigDecimal balance) {
+        UUID generatedUuid = UUID.randomUUID();
+        this.uuid = generatedUuid.toString();
+        this.balance = balance;
+        this.customerUuid = customerUuid;
+    }
+
+    public BankAccount(String uuid, String customerUuid, BigDecimal balance) {
         this.uuid = uuid;
         this.balance = balance;
         this.customerUuid = customerUuid;
