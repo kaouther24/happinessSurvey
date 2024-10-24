@@ -56,10 +56,10 @@ The accountsService exposes the following API endpoints:
 
 2. **Get list of accounts by customer UUID**:
 - Endpoint: GET /bankAccount/byCustomerId/{customerUuid}
-3. **Create an account by its UUID**:
+3. **Get an account by its UUID**:
 - Endpoint: GET /bankAccount/byIdAccount/{accountUuid}
-
-### Technologies Used
+`
+### Technolog`ies Used
 - Spring Boot: Framework for building microservices.
 - JUnit & Mockito: For unit and integration testing.
 - Docker: To containerize the service.
