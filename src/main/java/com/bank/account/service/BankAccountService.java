@@ -36,14 +36,14 @@ public class BankAccountService {
         if (accounts == null) {
             accounts = getAccounts();
         }
-        return accounts.stream().filter(bankAccount -> bankAccount.getUuid().equalsIgnoreCase(uuid)).findFirst();
+        return accounts.stream().filter(bankAccount -> uuid.equals(bankAccount.getUuid())).findFirst();
     }
 
     public List<BankAccount> findBankAccountsByCustomerUuid(String uuid) throws IOException {
         if (accounts == null) {
             accounts = getAccounts();
         }
-        List<BankAccount> result = accounts.stream().filter(bankAccount -> bankAccount.getCustomerUuid().equalsIgnoreCase(uuid)).toList();
+        List<BankAccount> result = accounts.stream().filter(bankAccount ->  uuid.equals(bankAccount.getCustomerUuid())).toList();
         return result;
     }
 
