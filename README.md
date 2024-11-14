@@ -1,4 +1,4 @@
-# accountsService
+# HappinessSurveyService
 
 The `happiness Survey` is a Spring Boot service to do a survey within the compagny.
 
