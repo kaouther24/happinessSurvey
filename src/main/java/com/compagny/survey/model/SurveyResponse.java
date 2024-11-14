@@ -1,0 +1,15 @@
+package com.compagny.survey.model;
+
+import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SurveyResponse {
+    private String responseId;
+    private String surveyId;
+    private List<Answer> answers;
+}

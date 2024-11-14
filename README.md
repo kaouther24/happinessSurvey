@@ -1,13 +1,12 @@
 # accountsService
 
-The `accountsService` is a Spring Boot microservice that manages bank accounts and provides functionalities for creating new accounts, retrieving account details, and handling customer-related operations.
+The `happiness Survey` is a Spring Boot service to do a survey within the compagny.
 
 ## Features
 
-- Create a new bank account for an existing customer.
-- Retrieve details of a customer's bank accounts.
-- Fetch customer accounts based on UUID.
-- Validate and process account data securely.
+- Create a survey via admin endpoint.
+- Add employee answers for the survey.
+- Get Survey answers
 
 ### Prerequisites
 
@@ -21,8 +20,8 @@ Ensure you have the following installed:
 
 1. **Clone the repository**:
    ```bash
-   git clone https://github.com/kaouther24/accountsService.git
-   cd accountsService
+   git clone https://github.com/kaouther24/happinessSurvey.git
+   cd happinessSurvey
 
 2. **Build the project using Maven**:
    ```bash
@@ -38,30 +37,14 @@ The service will be available at http://localhost:8080.
 
 1. **Build with docker**:
    ```bash
-   docker build -t accounts-service:latest .
+   docker build -t happiness-survey:latest .
    
 2. **Run the docker container**:
    ```bash
-   docker run -p 8083:8080 accounts-service
+   docker run -p 8083:8080 happiness-survey
    
-### API Endpoints
-The accountsService exposes the following API endpoints:
-1. **Create a new account for an existing customer**:
-- Endpoint: POST /bankAccount/new
-- Request body:
-  {
-  "customerUuid": "string",
-  "balance": 1000.0
-  }
-
-2. **Get list of accounts by customer UUID**:
-- Endpoint: GET /bankAccount/byCustomerId/{customerUuid}
-3. **Get an account by its UUID**:
-- Endpoint: GET /bankAccount/byIdAccount/{accountUuid}
-`
-### Technolog`ies Used
-- Spring Boot: Framework for building microservices.
-- JUnit & Mockito: For unit and integration testing.
+### Technologies Used
+- Spring Boot: Framework for building services.
 - Docker: To containerize the service.
 
 ### License

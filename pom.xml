@@ -8,11 +8,11 @@
 		<version>3.3.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.bank.account</groupId>
-	<artifactId>accountsService</artifactId>
+	<groupId>com.compagny.survey</groupId>
+	<artifactId>happinessSurvey</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>accountsService</name>
-	<description>Microservice for managing bank accounts</description>
+	<name>happinessSurvey</name>
+	<description>A service to do a survey</description>
 	<url/>
 	<licenses>
 		<license/>
@@ -55,6 +55,12 @@
 			<artifactId>mockito-core</artifactId>
 			<version>5.5.0</version> <!-- Replace with the latest version if available -->
 			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>1.18.30</version>
+			<scope>provided</scope>
 		</dependency>
 	</dependencies>
 
